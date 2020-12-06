@@ -1,0 +1,7 @@
+.online {
+  border: 1px solid red;
+}
+
+offline {
+  border: 1px solid darkred;
+}

@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button type="button" class="btn btn-primary" (click)='display()'>Display Details</button>
+      <p *ngIf="!show">Secret Password = tuna</p>
+      <p
+        *ngFor="let click of clicks"
+        [ngStyle]="{backgroundColor: click[1] > 5 ? 'blue' : ''}"
+        [ngClass]="{'clicks-font-white': click[1] > 5}">
+          {{ click[0] }}
+      </p>
+    </div>
+  </div>
+</div>
