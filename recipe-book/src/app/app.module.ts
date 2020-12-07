@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { ShoppingListComponent } from "./shopping-list/shopping-list.component";
@@ -15,7 +16,7 @@ import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component
     AppComponent, ShoppingListComponent, ShoppingListEditComponent, RecipesComponent, RecipeItemComponent, RecipeDetailComponent, HeaderComponent, RecipeListComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule, FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
