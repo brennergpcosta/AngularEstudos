@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingridient } from 'src/app/shared/ingredient.model';
 
 @Component({
@@ -14,25 +15,37 @@ import { Ingridient } from 'src/app/shared/ingredient.model';
   styleUrls: ['./shopping-list-edit.component.css'],
 })
 export class ShoppingListEditComponent implements OnInit {
-  @Output() ingredientOutput = new EventEmitter<Ingridient>();
+  // @Output() ingredientOutput = new EventEmitter<Ingridient>();
 
   @ViewChild('nameInputTemplate') nameInputRef: ElementRef;
   @ViewChild('amountInputTemplate')
   amountInputRef: ElementRef;
 
-  constructor() {}
+  constructor(private shoppingListService: ShoppingListService) {}
 
   ngOnInit(): void {}
 
+  // onAdd() {
+  //   this.ingredientOutput.emit(
+  //     new Ingridient(
+  //       this.nameInputRef.nativeElement.value,
+  //       this.amountInputRef.nativeElement.value
+  //     )
+  //   );
+  //   this.nameInputRef.nativeElement.value = '';
+  //   this.amountInputRef.nativeElement.value = 0;
+  // }
+
   onAdd() {
-    this.ingredientOutput.emit(
+    this.shoppingListService.addIngredient(
       new Ingridient(
         this.nameInputRef.nativeElement.value,
         this.amountInputRef.nativeElement.value
       )
     );
-    this.nameInputRef.nativeElement.value = '';
-    this.amountInputRef.nativeElement.value = 0;
+    // this.shoppingListService.ingredientAdded.emit(
+    //   this.shoppingListService.getIngredients()
+    // ); Coloquei no shoppingListService pq o cara é um gênio
   }
 
   onDelete() {}
