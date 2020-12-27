@@ -9,12 +9,10 @@ export class CountService {
 
   countActive() {
     this.counterToActive++;
-    console.log("Active: " + this.counterToActive);
   }
 
   countInactive() {
     this.counterToInactive++;
-    console.log("Inactive: " + this.counterToInactive);
   }
 
   constructor() {}

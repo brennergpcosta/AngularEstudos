@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.currentPage.changePage.subscribe((page: string) => {
       this.page = page;
-      console.log(page)
     });
   }
 }

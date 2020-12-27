@@ -13,6 +13,5 @@ export class HeaderComponent implements OnInit {
 
   changePage(page: string) {
     this.currentPage.changePage.emit(page)
-    console.log(page)
   }
 }

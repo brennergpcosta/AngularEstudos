@@ -7,15 +7,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() recipesOnInput: boolean
-  @Output() recipesOnOutput = new EventEmitter<boolean>();
-
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  changePage() {
-    this.recipesOnOutput.emit(!this.recipesOnInput)
-  }
 }

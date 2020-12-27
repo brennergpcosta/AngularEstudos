@@ -22,7 +22,6 @@ export class SeiComponent implements OnInit {
 
   display(){
     this.show = !this.show
-    console.log(this.clicks)
     this.count++
     // this.clicks.push(this.count)
     this.clicks.push([new Date(), this.count])

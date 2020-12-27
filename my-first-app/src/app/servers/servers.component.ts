@@ -31,6 +31,5 @@ export class ServersComponent implements OnInit {
 
   onUpdateServerName(input: any) {
     this.serverName = input.target.value
-    console.log(this.serverName)
   }
 }
