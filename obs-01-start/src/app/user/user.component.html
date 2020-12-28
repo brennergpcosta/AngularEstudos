@@ -1,0 +1,5 @@
+<p>User with <strong>ID {{ id }}</strong> was loaded</p>
+<button class="btn btn-primary" (click)="onActivate()" *ngIf="activated; else deactivated">Activate</button>
+<ng-template #deactivated>
+  <button class="btn btn-primary" (click)="onActivate()">Deactivate</button>
+</ng-template>

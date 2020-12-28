@@ -3,13 +3,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-
-  recipesOn = true
-
-  changePage(recipesOutput: boolean){
-    this.recipesOn = recipesOutput
-  }
-}
+export class AppComponent {}
