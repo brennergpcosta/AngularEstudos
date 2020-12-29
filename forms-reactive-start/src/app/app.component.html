@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+
+      <form [formGroup]="formInfo" (ngSubmit)="onSubmit()">
+
+        <div formGroupName="userData">
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              placeholder="Your Username!"
+              class="form-control">
+              <p class="help-block" *ngIf="!formInfo.get('userData.username').valid && formInfo.get('userData.username').touched">
+                <span *ngIf="formInfo.get('userData.username').errors['nameIsForbidden']">This name is invalid!</span>
+                <span *ngIf="formInfo.get('userData.username').errors['required']">This field is required!</span>
+              </p>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              formControlName="email"
+              placeholder="example@email.com"
+              class="form-control">
+              <p class="help-block" *ngIf="!formInfo.get('userData.email').valid && formInfo.get('userData.email').touched">Please enter a valid Email!</p>
+          </div>
+
+        </div>
+
+        <div class="radio" *ngFor="let gender of genders">
+          <label>
+            <input
+              type="radio"
+              formControlName="gender"
+              [value]="gender">{{ gender }}
+          </label>
+        </div>
+
+        <div formArrayName="hobbies">
+
+          <h4>Your Hobbies</h4>
+            <button class="btn btn-default" type="button" (click)="onAddHobby()">Add Hobby</button>
+
+            <div class="form-group" *ngFor="let hobbyControl of getHobbieControls(); index as i">
+              <input
+                type="text"
+                class="form-control"
+                [formControlName]="i">
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="!formInfo.valid">Submit</button>
+        <p class="help-block" *ngIf="!formInfo.valid && formInfo.touched">There're still fields that need to be fulfilled!</p>
+      </form>
+    </div>
+  </div>
+</div>
