@@ -13,19 +13,40 @@ export class ShoppingListService {
 
   constructor() {}
 
-  ingredientAdded = new Subject<Ingridient[]>();
+  listChange = new Subject<Ingridient[]>();
+  startedEditing = new Subject<number>();
 
   getIngredients() {
     return this.ingredients.slice();
   }
 
-  addIngredient(newIngredient: Ingridient) {
-    this.ingredients.push(newIngredient);
-    this.ingredientAdded.next(this.ingredients);
+  getIngredient(index: number) {
+    return this.ingredients[index];
   }
 
-  addArrayOfIngredients(newIngredients: Ingridient[]){
+  addIngredient(newIngredient: Ingridient) {
+    this.ingredients.push(newIngredient);
+    this.listChange.next(this.ingredients.slice());
+  }
+
+  addArrayOfIngredients(newIngredients: Ingridient[]) {
     this.ingredients.push(...newIngredients);
-    this.ingredientAdded.next(this.ingredients);
+    this.listChange.next(this.ingredients.slice());
+  }
+
+  deleteLastIngredient() {
+    this.ingredients.pop();
+    this.listChange.next(this.ingredients.slice());
+  }
+
+  editItem(ingredient: Ingridient, index: number) {
+    console.log('sei2', ingredient)
+    this.ingredients[index] = ingredient;
+    this.listChange.next(this.ingredients.slice());
+  }
+
+  deteleIngredient(index: number) {
+    this.ingredients.splice(index, 1);
+    this.listChange.next(this.ingredients.slice());
   }
 }
