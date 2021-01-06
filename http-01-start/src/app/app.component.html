@@ -51,7 +51,7 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
-      <p *ngIf="loadedPosts.length < 1 && !isFeatching; else thereArePosts">No posts available! {{ loadedPosts.length < 1 }} - {{ !isFeatching }}</p>
+      <p *ngIf="loadedPosts.length < 1 && !isFeatching; else thereArePosts">No posts available! Create a new one!</p>
       <ng-template #thereArePosts>
         <ul class="list-group">
           <li class="list-group-item" *ngFor="let post of loadedPosts">
@@ -60,8 +60,13 @@
           </li>
         </ul>
       </ng-template>
-      <p *ngIf="isFeatching">Loading...</p>
-      <p>{{ loadedPosts.length < 1 }} - {{ !isFeatching }}</p>
+      <!-- <p>{{ errorMsg }}</p> -->
+      <p *ngIf="isFeatching && errorMsg === null">Loading...</p>
+      <div class="alert alert-danger" *ngIf="errorMsg !== null">
+        <h1>An Error has Occurred!</h1>
+        <p>{{ errorMsg.message }}</p>
+        <button class="btn btn-danger" (click)="onHandleError()">Ok</button>
+      </div>
     </div>
   </div>
 </div>

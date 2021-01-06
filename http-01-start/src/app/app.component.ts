@@ -1,48 +1,73 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { delay, map } from "rxjs/operators";
 import { Post } from "./post.model";
 import { PostService } from "./post.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   loadedPosts: Post[] = [];
   isFeatching: boolean = false;
+  errorMsg = null;
+
+  private errorSub: Subscription;
 
   constructor(private http: HttpClient, private postService: PostService) {}
 
   ngOnInit() {
-    this.fetchPosts();
+    this.postService.error.subscribe((error: string) => {
+      this.errorMsg = error;
+    })
+
+    this.isFeatching = true;
+    this.postService.fetchPosts().subscribe((posts: Post[]) => {
+      this.isFeatching = false;
+      this.loadedPosts = posts;
+    }, (error) => {
+      this.errorMsg = error.message;
+    });
+  }
+
+  ngOnDestroy(){
+    this.errorSub.unsubscribe();
   }
 
   onCreatePost(postData: Post) {
-    // Send Http request
-    // this.http
-    //   .post<{ name: string }>(
-    //     "https://angular-curse-database-default-rtdb.firebaseio.com/posts.json",
-    //     postData
-    //   )
-    //   .subscribe((responseData) => {
-    //     console.log(responseData);
-    //   });
     this.postService.createAndStorePost(postData.title, postData.content);
   }
 
   onFetchPosts() {
-    // Send Http request
-    this.fetchPosts();
+    this.isFeatching = true;
+    this.postService.fetchPosts().subscribe((posts: Post[]) => {
+      this.isFeatching = false;
+      this.loadedPosts = posts;
+    }, (error) => {
+      this.errorMsg = error;
+    });
   }
 
   onClearPosts() {
     // Send Http request
+    this.postService.deletePosts().subscribe(() => {
+      this.loadedPosts = [];
+    });
   }
 
   private fetchPosts() {
     this.isFeatching = true;
-    this.postService.fetchPosts();
+    this.postService.fetchPosts().subscribe((posts: Post[]) => {
+      this.isFeatching = false;
+      this.loadedPosts = posts;
+    });
+  }
+
+  onHandleError() {
+    this.errorMsg = null;
+    this.isFeatching = false;
   }
 }

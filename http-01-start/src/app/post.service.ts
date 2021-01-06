@@ -1,10 +1,18 @@
-import { HttpClient } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpEventType,
+  HttpHeaders,
+  HttpParams,
+} from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map } from "rxjs/operators";
+import { Subject, throwError } from "rxjs";
+import { map, catchError, tap } from "rxjs/operators";
 import { Post } from "./post.model";
 
 @Injectable({ providedIn: "root" })
 export class PostService {
+  error = new Subject<string>();
+
   constructor(private http: HttpClient) {}
 
   createAndStorePost(title: string, content: string) {
@@ -12,17 +20,32 @@ export class PostService {
     this.http
       .post<{ name: string }>(
         "https://angular-curse-database-default-rtdb.firebaseio.com/posts.json",
-        postData
+        postData,
+        {
+          observe: "response",
+        }
       )
-      .subscribe((responseData) => {
-        console.log(responseData);
-      });
+      .subscribe(
+        (responseData) => {
+          console.log(responseData);
+        },
+        (error) => {
+          this.error.next(error.message);
+        }
+      );
   }
 
   fetchPosts() {
-    this.http
+    return this.http
       .get<{ [key: string]: Post }>(
-        "https://angular-curse-database-default-rtdb.firebaseio.com/posts.json"
+        "https://angular-curse-database-default-rtdb.firebaseio.com/posts.json",
+        {
+          headers: new HttpHeaders({
+            "Custom-Header": "My own custom header!",
+          }),
+          params: new HttpParams().set("print", "pretty"),
+          responseType: 'json'
+        }
       )
       .pipe(
         map((responseData) => {
@@ -33,8 +56,34 @@ export class PostService {
             }
           }
           return postArray;
+        }),
+        catchError((errorRes) => {
+          // Send to analytics server
+          return throwError(errorRes);
         })
+      );
+  }
+
+  deletePosts() {
+    return this.http
+      .delete(
+        "https://angular-curse-database-default-rtdb.firebaseio.com/posts.json",
+        {
+          observe: "events",
+          responseType: 'text'
+        }
       )
-      .subscribe((posts) => {});
+      .pipe(
+        tap((event) => {
+          console.log(event);
+          if (event.type === HttpEventType.Sent) {
+            // You can put some code to inform the user that the data was sent
+            // or excute some other code...
+          }
+          if (event.type === HttpEventType.Response) {
+            console.log(event.body);
+          }
+        })
+      );
   }
 }
