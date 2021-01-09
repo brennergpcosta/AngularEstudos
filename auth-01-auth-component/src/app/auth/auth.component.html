@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <form [formGroup]="authForm" (ngSubmit)='onLogin()'>
+      <div class="form-group">
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" class="form-control" formControlName='email'>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" formControlName='password'/>
+      </div>
+      <div class="btn-toolbar">
+        <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">{{ isLoginMode ? 'Login' : 'Sign Up' }}</button>
+        <button class="btn btn-primary" type="button" (click)="onSwitchMode()">Switch to {{ !isLoginMode ? 'Login' : 'Sign Up' }}</button>
+      </div>
+      <div class="">
+        <img src="../../assets/gif/loader.gif" height="50px" *ngIf="authForm.get('email').pending">
+      </div>
+    </form>
+  </div>
+</div>
