@@ -17,8 +17,6 @@ export class AuthComponent implements OnInit {
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    console.log('isLoginMode: ', this.isLoginMode);
-
     this.authForm = this.fb.group({
       email: ['asdf@asdf.com', [Validators.required, Validators.email]],
       password: ['123456@@@@FF%%fafs', [Validators.required]],

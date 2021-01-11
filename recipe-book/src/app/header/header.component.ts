@@ -24,8 +24,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       // this.isAuth = !loginUser ? false : true;
       //It's the same as:
       this.isAuth = !!loginUser;
-      console.log('!loginUser: ', !loginUser)
-      console.log('!!loginUser: ', !!loginUser)
     });
   }
 
@@ -43,6 +41,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout(){
     this.authService.logout();
-    this.router.navigate(['./auth']);
+    // this.router.navigate(['./auth']);
   }
 }
