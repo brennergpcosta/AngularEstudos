@@ -1,26 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { AuthResponseData, AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   error: string = null;
   authForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
+
+  private subs: Subscription;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngOnInit() {
     this.authForm = this.fb.group({
       email: ['asdf@asdf.com', [Validators.required, Validators.email]],
       password: ['123456@@@@FF%%fafs', [Validators.required]],
     });
+  }
+
+  ngOnDestroy(){
+    if (this.subs) {
+      this.subs.unsubscribe();
+    }
   }
 
   onSubmit() {
@@ -54,6 +77,7 @@ export class AuthComponent implements OnInit {
       (errorMessage) => {
         console.log('Error: ', errorMessage);
         this.error = errorMessage;
+        this.showErrorAlert(errorMessage);
         this.isLoading = false;
       }
     );
@@ -63,5 +87,26 @@ export class AuthComponent implements OnInit {
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  onHandleError() {
+    this.error = null;
+  }
+
+  private showErrorAlert(message: string) {
+    const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(
+      AlertComponent
+    );
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+
+    hostViewContainerRef.clear();
+
+    const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);
+
+    componentRef.instance.message = message;
+    this.subs = componentRef.instance.close.subscribe(() => {
+      this.subs.unsubscribe();
+      hostViewContainerRef.clear();
+    });
   }
 }
